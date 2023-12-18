@@ -36,12 +36,3 @@ func InicializeDB(dsn string) error {
 
 	return nil
 }
-
-func Create(user *Usuario) error {
-	result := DB.Create(user)
-	if result.Error != nil {
-		fmt.Println("Error en el servicio de la base de datos.")
-		return result.Error
-	}
-	return nil
-}

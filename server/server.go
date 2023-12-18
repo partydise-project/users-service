@@ -18,10 +18,11 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	database.Create(&userCreateDTO)
+	//database.Create(&userCreateDTO)
 	c.JSON(http.StatusCreated, userCreateDTO)
 }
 func Hello(c *gin.Context) {
+	database.ReadUsuario(3)
 	c.JSON(http.StatusCreated, "Hola mundo desde un endpoint de gin ☻.")
 }
 
