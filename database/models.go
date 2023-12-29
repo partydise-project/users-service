@@ -30,7 +30,7 @@ type Usuario struct {
 
 type Recreador struct {
 	gorm.Model
-	UsuarioID            int            `json:"usuario_ID"`
+	UsuarioID            int            `json:"usuario_ID" gorm:"not null"`
 	Usuario              Usuario        `json:"usuario"`
 	ExperienciaRecreando string         `json:"experiencia_recreando"`
 	Dotacion             bool           `json:"dotacion"`
@@ -41,14 +41,14 @@ type Recreador struct {
 
 type Cliente struct {
 	gorm.Model
-	UsuarioID  int     `json:"usuario_ID"`
+	UsuarioID  int     `json:"usuario_ID" gorm:"not null"`
 	Usuario    Usuario `json:"usuario"`
 	Antiguedad string  `json:"antiguedad"`
 }
 
 type Trabajador struct {
 	gorm.Model
-	UsuarioID int     `json:"usuario_ID"`
+	UsuarioID int     `json:"usuario_ID" gorm:"not null"`
 	Usuario   Usuario `json:"usuario"`
 	Cargo     string  `json:"cargo"`
 }

@@ -13,10 +13,9 @@ func CreateUsuario(user *Usuario) error {
 
 func ReadUsuario(id int) (*Usuario, error) {
 	var user Usuario
-	result := DB.First(&user, id)
-	if result.Error != nil {
-		fmt.Println("Error al crear el usuario.")
-		return nil, result.Error
+
+	if err := DB.First(&user, id).Error; err != nil {
+		return nil, err
 	}
 
 	return &user, nil
@@ -24,10 +23,9 @@ func ReadUsuario(id int) (*Usuario, error) {
 
 func ReadUsuarios() ([]Usuario, error) {
 	var users []Usuario
-	result := DB.Find(&users)
-	if result.Error != nil {
-		fmt.Println("Error al crear el usuario.")
-		return nil, result.Error
+
+	if err := DB.Find(&users).Error; err != nil {
+		return nil, err
 	}
 
 	return users, nil
