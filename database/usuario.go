@@ -32,3 +32,12 @@ func ReadUsuarios() ([]Usuario, error) {
 
 	return users, nil
 }
+
+func UpdateUser(user *Usuario) (*Usuario, error) {
+	result := DB.Save(user)
+	if result.Error != nil {
+		fmt.Println("Error al crear el usuario.")
+		return nil, result.Error
+	}
+	return user, nil
+}
