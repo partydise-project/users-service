@@ -12,9 +12,15 @@ func CreateUser(c *gin.Context) {
 	var userCreateDTO database.Usuario
 
 	if err := c.BindJSON(&userCreateDTO); err != nil {
-		fmt.Println("error al recibir el objeto(user) en el request", err)
+		fmt.Println("Error:", err)
 
-		c.JSON(404, "error error al crear el user")
+		c.JSON(400, gin.H{"error": err})
+		return
+	}
+
+	err := database.CreateUsuario(&userCreateDTO)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err})
 		return
 	}
 

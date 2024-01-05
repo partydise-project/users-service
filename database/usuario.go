@@ -1,11 +1,8 @@
 package database
 
-import "fmt"
-
 func CreateUsuario(user *Usuario) error {
 	result := DB.Create(user)
 	if result.Error != nil {
-		fmt.Println("Error al crear el usuario.")
 		return result.Error
 	}
 	return nil
@@ -31,11 +28,17 @@ func ReadUsuarios() ([]Usuario, error) {
 	return users, nil
 }
 
-func UpdateUser(user *Usuario) (*Usuario, error) {
-	result := DB.Save(user)
-	if result.Error != nil {
-		fmt.Println("Error al crear el usuario.")
-		return nil, result.Error
+func UpdateUser(id int, user *Usuario) error {
+	var existingUser Usuario
+	if err := DB.First(&existingUser, id).Error; err != nil {
+		return err
 	}
-	return user, nil
+
+	existingUser = *user
+
+	if err := DB.Save(&existingUser).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

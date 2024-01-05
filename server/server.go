@@ -15,10 +15,10 @@ func InicializeRouter() *gin.Engine {
 	r.GET("/", Hello)
 
 	//User module.
-	r.POST("/usuarios", CreateUser)
-	r.GET()
-	//read all
-	r.PATCH("/usuario", UpdateUser)
+	r.POST("/usuario", CreateUser)
+	r.GET("/usuario/:id", ReadUser)
+	r.GET("/usuarios", ReadUsers)
+	r.PATCH("/usuario/:id", UpdateUser)
 
 	//Recreador module.
 	//CLient module.
