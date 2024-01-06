@@ -1,8 +1,6 @@
 package server
 
 import (
-	"fmt"
-	"net/http"
 	"users-service/database"
 
 	"github.com/gin-gonic/gin"
@@ -12,9 +10,13 @@ func CreateUser(c *gin.Context) {
 	var userCreateDTO database.Usuario
 
 	if err := c.BindJSON(&userCreateDTO); err != nil {
-		fmt.Println("Error:", err)
-
 		c.JSON(400, gin.H{"error": err})
+		return
+	}
+
+	// Validate IDauth0 required.
+	if userCreateDTO.Auth0ID == "" {
+		c.JSON(404, gin.H{"error": "ID de Auth0 es obligatorio."})
 		return
 	}
 
@@ -24,26 +26,46 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, userCreateDTO)
+	c.JSON(201, userCreateDTO)
 }
 
 func ReadUser(c *gin.Context) {
-
-}
-
-func ReadUsers(c *gin.Context) {
-
-}
-
-func UpdateUser(c *gin.Context) {
-	var user database.Usuario
-
-	if err := c.BindJSON(&user); err != nil {
-		fmt.Println("error al recibir el objeto(user) en el request", err)
-
-		c.JSON(404, "error error al crear el user")
+	usuario, err := database.ReadUsuario(c.Param("id"))
+	if err != nil {
+		c.JSON(404, gin.H{"error": "No se encuentra registrado un usuario con ese id."})
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	c.JSON(200, usuario)
+}
+
+func ReadUsers(c *gin.Context) {
+	usuarios, err := database.ReadUsuarios()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err})
+		return
+	}
+
+	c.JSON(200, usuarios)
+}
+
+func UpdateUser(c *gin.Context) {
+	user, err := database.ReadUsuario(c.Param("id"))
+	if err != nil {
+		c.JSON(404, gin.H{"No se encontro registros con ese id": err})
+		return
+	}
+
+	if err := c.BindJSON(&user); err != nil {
+		c.JSON(400, gin.H{"error": "Error al decodificar el JSON"})
+		return
+	}
+
+	err = database.UpdateUser(user)
+	if err != nil {
+		c.JSON(500, gin.H{"error al actualizar el usuario": err})
+		return
+	}
+
+	c.JSON(201, user)
 }

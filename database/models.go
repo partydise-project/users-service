@@ -2,13 +2,6 @@ package database
 
 import "gorm.io/gorm"
 
-type genero int
-
-const (
-	Hombre genero = iota
-	Mujer
-)
-
 type nivelHabilidad int
 
 const (
@@ -24,7 +17,7 @@ type Usuario struct {
 	NumeroCelular       uint64 `json:"numero_celular"`
 	DireccionResidencia string `json:"direccion_residencia"`
 	FechaNacimiento     string `json:"fecha_nacimiento"`
-	Genero              genero `json:"genero"`
+	Genero              string `json:"genero"`
 	Nombre              string `json:"nombre"`
 }
 

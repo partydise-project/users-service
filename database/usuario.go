@@ -8,7 +8,7 @@ func CreateUsuario(user *Usuario) error {
 	return nil
 }
 
-func ReadUsuario(id int) (*Usuario, error) {
+func ReadUsuario(id string) (*Usuario, error) {
 	var user Usuario
 
 	if err := DB.First(&user, id).Error; err != nil {
@@ -28,15 +28,8 @@ func ReadUsuarios() ([]Usuario, error) {
 	return users, nil
 }
 
-func UpdateUser(id int, user *Usuario) error {
-	var existingUser Usuario
-	if err := DB.First(&existingUser, id).Error; err != nil {
-		return err
-	}
-
-	existingUser = *user
-
-	if err := DB.Save(&existingUser).Error; err != nil {
+func UpdateUser(user *Usuario) error {
+	if err := DB.Save(&user).Error; err != nil {
 		return err
 	}
 
