@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
@@ -17,9 +18,6 @@ var (
 
 	// The issuer of our token.
 	issuer = "go-jwt-middleware-example"
-
-	// The audience of our token.
-	audience = []string{"audience-example"}
 
 	// Our token must be signed using this data.
 	keyFunc = func(ctx context.Context) (interface{}, error) {
@@ -36,12 +34,14 @@ var (
 // checkJWT is a gin.HandlerFunc middleware
 // that will check the validity of our JWT.
 func CheckJWT() gin.HandlerFunc {
+	audience := os.Getenv("AUTH0_AUDIENCE")
+
 	// Set up the validator.
 	jwtValidator, err := validator.New(
 		keyFunc,
 		validator.HS256,
 		issuer,
-		audience,
+		[]string{audience},
 		validator.WithCustomClaims(customClaims),
 		validator.WithAllowedClockSkew(30*time.Second),
 	)
