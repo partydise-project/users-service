@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"users-service/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +14,9 @@ func Hello(c *gin.Context) {
 func InicializeRouter() *gin.Engine {
 	r := gin.Default()
 	r.GET("/", Hello)
+
+	//Auth0 test.
+	r.GET("/auth0-test", middleware.CheckJWT(), Hello)
 
 	//User module.
 	r.POST("/usuario", CreateUser)
