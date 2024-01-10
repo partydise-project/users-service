@@ -1,29 +1,19 @@
 package middleware
 
 import (
-	"context"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/auth0/go-jwt-middleware/v2/jwks"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"github.com/gin-gonic/gin"
 )
 
 var (
-	// The signing key for the token.
-	signingKey = []byte("secret")
-
-	// The issuer of our token.
-	issuer = "go-jwt-middleware-example"
-
-	// Our token must be signed using this data.
-	keyFunc = func(ctx context.Context) (interface{}, error) {
-		return signingKey, nil
-	}
-
 	// We want this struct to be filled in with
 	// our custom claims from the token.
 	customClaims = func() validator.CustomClaims {
@@ -34,14 +24,21 @@ var (
 // checkJWT is a gin.HandlerFunc middleware
 // that will check the validity of our JWT.
 func CheckJWT() gin.HandlerFunc {
-	audience := os.Getenv("AUTH0_AUDIENCE")
+	issuerURL, err := url.Parse("https://" + os.Getenv("AUTH0_DOMAIN") + "/")
+	if err != nil {
+		log.Fatalf("Failed to parse the issuer url: %v", err)
+	}
+
+	provider := jwks.NewCachingProvider(issuerURL, 5*time.Minute)
+
+	//audience := os.Getenv("AUTH0_AUDIENCE")
 
 	// Set up the validator.
 	jwtValidator, err := validator.New(
-		keyFunc,
-		validator.HS256,
-		issuer,
-		[]string{audience},
+		provider.KeyFunc,
+		validator.RS256,
+		issuerURL.String(),
+		[]string{os.Getenv("AUTH0_AUDIENCE")},
 		validator.WithCustomClaims(customClaims),
 		validator.WithAllowedClockSkew(30*time.Second),
 	)
