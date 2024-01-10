@@ -23,13 +23,13 @@ type Usuario struct {
 
 type Recreador struct {
 	gorm.Model
-	UsuarioID            int            `json:"usuario_ID" gorm:"not null"`
-	Usuario              Usuario        `json:"usuario"`
-	ExperienciaRecreando string         `json:"experiencia_recreando"`
-	Dotacion             bool           `json:"dotacion"`
-	NivelRecreacion      nivelHabilidad `json:"nivel_recreacion"`
-	NivelDecoracion      nivelHabilidad `json:"nivel_decoracion"`
-	NivelMagia           nivelHabilidad `json:"nivel_magia"`
+	UsuarioID            int     `json:"usuario_ID" gorm:"not null"`
+	Usuario              Usuario `json:"usuario"`
+	ExperienciaRecreando string  `json:"experiencia_recreando"`
+	Dotacion             bool    `json:"dotacion"`
+	NivelRecreacion      string  `json:"nivel_recreacion"`
+	NivelDecoracion      string  `json:"nivel_decoracion"`
+	NivelMagia           string  `json:"nivel_magia"`
 }
 
 type Cliente struct {

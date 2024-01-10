@@ -1,6 +1,12 @@
 package database
 
+import "errors"
+
 func CreateRecreador(recreador *Recreador) error {
+	if recreador.UsuarioID == 0 {
+		return errors.New("the userID must not be 0")
+	}
+
 	result := DB.Create(recreador)
 	if result.Error != nil {
 		return result.Error
@@ -8,10 +14,10 @@ func CreateRecreador(recreador *Recreador) error {
 	return nil
 }
 
-func ReadRecreador(id int) (*Recreador, error) {
+func ReadRecreador(id string) (*Recreador, error) {
 	var recreador Recreador
 
-	if err := DB.First(&recreador, id).Error; err != nil {
+	if err := DB.Preload("Usuario").First(&recreador, id).Error; err != nil {
 		return nil, err
 	}
 
@@ -28,15 +34,8 @@ func ReadRecreadores() ([]Recreador, error) {
 	return recreadores, nil
 }
 
-func UpdateRecreador(id int, recreador *Recreador) error {
-	var existingRecreador Recreador
-	if err := DB.First(&existingRecreador, id).Error; err != nil {
-		return err
-	}
-
-	existingRecreador = *recreador
-
-	if err := DB.Save(&existingRecreador).Error; err != nil {
+func UpdateRecreador(recreador *Recreador) error {
+	if err := DB.Save(&recreador).Error; err != nil {
 		return err
 	}
 

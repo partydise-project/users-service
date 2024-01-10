@@ -10,7 +10,6 @@ func CreateUsuario(user *Usuario) error {
 
 func ReadUsuario(id string) (*Usuario, error) {
 	var user Usuario
-
 	if err := DB.First(&user, id).Error; err != nil {
 		return nil, err
 	}
