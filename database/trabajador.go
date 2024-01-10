@@ -28,7 +28,7 @@ func ReadTrabajador(id string) (*Trabajador, error) {
 func ReadTrabajadores() ([]Trabajador, error) {
 	var trabajadores []Trabajador
 
-	if err := DB.Find(&trabajadores).Error; err != nil {
+	if err := DB.Preload("Usuario").Find(&trabajadores).Error; err != nil {
 		return nil, err
 	}
 

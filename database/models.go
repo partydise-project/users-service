@@ -2,14 +2,6 @@ package database
 
 import "gorm.io/gorm"
 
-type nivelHabilidad int
-
-const (
-	Basico nivelHabilidad = iota
-	Intermedio
-	Experto
-)
-
 type Usuario struct {
 	gorm.Model
 	Email               string `json:"email"`

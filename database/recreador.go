@@ -27,7 +27,7 @@ func ReadRecreador(id string) (*Recreador, error) {
 func ReadRecreadores() ([]Recreador, error) {
 	var recreadores []Recreador
 
-	if err := DB.Find(&recreadores).Error; err != nil {
+	if err := DB.Preload("Usuario").Find(&recreadores).Error; err != nil {
 		return nil, err
 	}
 
