@@ -31,6 +31,11 @@ func InicializeRouter() *gin.Engine {
 	r.PATCH("/recreador/:id", UpdateRecreador)
 
 	//CLient module.
+
 	//Trabajador module.
+	r.POST("/trabajador", CreateTrabajador)
+	r.GET("/trabajador/:id", ReadTrabajador)
+	r.GET("/trabajadores", ReadTrabajadores)
+	r.PATCH("/trabajador/:id", UpdateTrabajador)
 	return r
 }
