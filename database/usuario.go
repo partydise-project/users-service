@@ -34,3 +34,7 @@ func UpdateUser(user *Usuario) error {
 
 	return nil
 }
+
+func CreateWork() error {
+	return nil
+}
