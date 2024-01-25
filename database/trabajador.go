@@ -1,17 +1,28 @@
 package database
 
-import "errors"
-
-func CreateTrabajador(trabajador *Trabajador) error {
-	if trabajador.UsuarioID == 0 {
-		return errors.New("the userID must not be 0")
+func CreateTrabajador(user *Usuario, trabajador *Trabajador) error {
+	// Iniciar la transacción
+	tx := DB.Begin()
+	if tx.Error != nil {
+		return tx.Error
 	}
 
-	result := DB.Create(trabajador)
-	if result.Error != nil {
-		return result.Error
+	if err := tx.Create(user).Error; err != nil {
+		// Revertir la transacción en caso de error
+		tx.Rollback()
+		return err
 	}
 
+	trabajador.UsuarioID = user.ID
+
+	if err := tx.Create(trabajador).Error; err != nil {
+		// Revertir la transacción en caso de error
+		tx.Rollback()
+		return err
+	}
+
+	// Commit de la transacción si todo ha ido bien
+	tx.Commit()
 	return nil
 }
 

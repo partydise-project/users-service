@@ -33,7 +33,7 @@ type Cliente struct {
 
 type Trabajador struct {
 	gorm.Model
-	UsuarioID int     `json:"usuario_ID" gorm:"not null"`
+	UsuarioID uint    `json:"usuario_ID" gorm:"not null"`
 	Usuario   Usuario `json:"usuario"`
 	Cargo     string  `json:"cargo"`
 }
