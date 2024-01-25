@@ -8,19 +8,14 @@ import (
 
 func CreateRecreador(c *gin.Context) {
 	var userCreateDTO database.Recreador
+	user := userCreateDTO.Usuario
 
 	if err := c.BindJSON(&userCreateDTO); err != nil {
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
-	// Validate UserID required.
-	if userCreateDTO.UsuarioID == 0 {
-		c.JSON(404, gin.H{"error": "the userID must not be 0"})
-		return
-	}
-
-	err := database.CreateRecreador(&userCreateDTO)
+	err := database.CreateRecreador(&user, &userCreateDTO)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err})
 		return

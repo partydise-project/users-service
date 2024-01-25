@@ -1,16 +1,28 @@
 package database
 
-import "errors"
-
-func CreateRecreador(recreador *Recreador) error {
-	if recreador.UsuarioID == 0 {
-		return errors.New("the userID must not be 0")
+func CreateRecreador(user *Usuario, recreador *Recreador) error {
+	// Iniciar la transacción
+	tx := DB.Begin()
+	if tx.Error != nil {
+		return tx.Error
 	}
 
-	result := DB.Create(recreador)
-	if result.Error != nil {
-		return result.Error
+	if err := tx.Create(user).Error; err != nil {
+		// Revertir la transacción en caso de error
+		tx.Rollback()
+		return err
 	}
+
+	recreador.UsuarioID = user.ID
+
+	if err := tx.Create(recreador).Error; err != nil {
+		// Revertir la transacción en caso de error
+		tx.Rollback()
+		return err
+	}
+
+	// Commit de la transacción si todo ha ido bien
+	tx.Commit()
 	return nil
 }
 
