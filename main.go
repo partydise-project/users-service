@@ -41,6 +41,6 @@ func main() {
 	puerto := 8080
 	direccion := fmt.Sprintf(":%d", puerto)
 
-	fmt.Println("Hello word", dns)
+	fmt.Println("Hello server listing in:", puerto)
 	log.Fatal(r.Run(direccion))
 }
